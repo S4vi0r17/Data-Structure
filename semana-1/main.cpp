@@ -1,12 +1,16 @@
-#include <iostream>
 #include <conio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 struct Producto
 {
-    string codigo;
-    string nombre;
+    char codigo[10];
+    char nombre[10];
     int cantidad;
 };
 
@@ -19,6 +23,7 @@ class Fila
 public:
     void crear();
     void recorrer();
+    void buscar();
 };
 
 void Fila::crear()
@@ -29,23 +34,23 @@ void Fila::crear()
     {
         cout << "Error al abrir el archivo" << endl;
         exit(1);
-        cout << "Ingrese la cantidad de productos: ";
-        cin >> n;
-        i = 0;
-        while (i < n)
-        {
-            cout << "Producto " << i + 1 << endl;
-            cout << "Codigo: ";
-            cin >> P.codigo;
-            cout << "Nombre: ";
-            cin >> P.nombre;
-            cout << "Cantidad: ";
-            cin >> P.cantidad;
-            fwrite(&P, sizeof(Producto), 1, F);
-            i++;
-        }
-        fclose(F);
     }
+    cout << "Ingrese la cantidad de productos: ";
+    cin >> n;
+    i = 0;
+    while (i < n)
+    {
+        cout << "Producto " << i + 1 << endl;
+        cout << "Codigo: ";
+        cin >> P.codigo;
+        cout << "Nombre: ";
+        cin >> P.nombre;
+        cout << "Cantidad: ";
+        cin >> P.cantidad;
+        fwrite(&P, sizeof(P), 1, F);
+        i++;
+    }
+    fclose(F);
 }
 
 void Fila::recorrer()
@@ -56,23 +61,52 @@ void Fila::recorrer()
         cout << "Error al abrir el archivo" << endl;
         exit(1);
     }
-    fread(&P, sizeof(P), 1, F);
     int bol = 0;
     cout << "Reporte de productos" << endl;
-    while (!feof(F))
+    while (fread(&P, sizeof(P), 1, F) == 1)
     {
         bol++;
         cout << endl
              << endl
-             << bol << "Codigo: " << P.codigo << endl;
+             << bol << " Codigo: " << P.codigo << endl;
         cout << "Nombre: " << P.nombre << endl;
-        cout << endl
-             << endl
-             << "Cantidad: " << P.cantidad << endl;
+        cout << "Cantidad: " << P.cantidad << endl;
         if (bol % 2 == 0)
         {
             cout << "Presione una tecla para continuar" << endl;
-            // cin.get();
+        }
+    }
+    fclose(F);
+    getch();
+}
+
+void Fila::buscar(){
+    F = fopen("productos.txt", "r");
+    if (F == NULL)
+    {
+        cout << "Error al abrir el archivo" << endl;
+        exit(1);
+    }
+    fread(&P, sizeof(P), 1, F);
+    int bol = 0;
+    char codigo[10] = "7AB01";
+    cout << "Reporte de productos" << endl;
+    while (!feof(F))
+    {
+        if (codigo == P.codigo)
+        {
+            bol++;
+            cout << endl
+                 << endl
+                 << bol << " El producto de codigo " << codigo << " se ha encontrado" << P.codigo << endl;
+            cout << "Nombre: " << P.nombre << endl;
+            cout << "Cantidad: " << P.cantidad << endl;
+        } else {
+            cout << "No se encontro el producto con el codigo " << codigo << endl;
+        }
+        if (bol % 2 == 0)
+        {
+            cout << "Presione una tecla para continuar" << endl;
         }
         fread(&P, sizeof(P), 1, F);
     }
@@ -86,18 +120,20 @@ int menu()
     cout << "Menu" << endl;
     cout << "1. Crear archivo" << endl;
     cout << "2. Recorrer archivo" << endl;
-    cout << "3. Salir" << endl;
+    cout << "3. Buscar producto" << endl;
+    cout << "4. Salir" << endl;
     cout << "Opcion: ";
     cin >> opc;
     return opc;
 }
 
-main() {
+main()
+{
     int opc;
     Fila fil;
     int i, n;
     opc = menu();
-    while (opc != 0)
+    while (opc != 4)
     {
         switch (opc)
         {
@@ -106,6 +142,15 @@ main() {
             break;
         case 2:
             fil.recorrer();
+            break;
+        case 3:
+            fil.buscar();
+            break;
+        case 4:
+            cout << "Saliendo..." << endl;
+            break;
+        default:
+            cout << "Opcion no valida" << endl;
             break;
         }
         opc = menu();
