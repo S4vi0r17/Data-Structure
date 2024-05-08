@@ -39,4 +39,7 @@ func main() {
 		}
 		fmt.Println()
 	}
+
+	Multiplicacion()
+	fmt.Println(HolaMundo)
 }
