@@ -73,10 +73,47 @@ void BubbleSort(int arr[])
     }
 }
 
+int Partition(int arr[], int low, int high)
+{
+    int temp;
+
+    int pivot = arr[high];
+
+    int i = low - 1;
+
+    for (int j = low; j < high; j++)
+    {
+        if (arr[j] <= pivot)
+        {
+            i++;
+            temp = arr[j];
+            arr[j] = arr[i];
+            arr[i] = temp;
+        }
+    }
+    temp = arr[high];
+    arr[high] = arr[i + 1];
+    arr[i + 1] = temp;
+
+    return i + 1;
+}
+
+void QuickSort(int arr[], int low, int high)
+{
+    int pivot;
+    if (low < high)
+    {
+        pivot = Partition(arr, low, high);
+
+        QuickSort(arr, low, pivot - 1);
+        QuickSort(arr, pivot + 1, high);
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     int arreglo[5] = {5, 2, 1, 4, 3};
-    BubbleSort(arreglo);
+    QuickSort(arreglo, 0, 4);
     for (int i = 0; i < 5; i++)
     {
         cout << arreglo[i] << endl;
