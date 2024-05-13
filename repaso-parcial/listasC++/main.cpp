@@ -10,15 +10,11 @@ struct Nodo
 
 void insert(Nodo *&, int);
 
-int main()
+main()
 {
     Nodo *list = NULL;
 
-    int data = 5;
-
     insert(list, 5);
-
-    return 0;
 }
 
 void insert(Nodo *&list, int n)
