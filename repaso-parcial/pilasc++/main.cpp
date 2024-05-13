@@ -18,8 +18,9 @@ void push(Node *&stack, int data)
     cout << "Value: " << data << endl;
 }
 
-void pop(Node *&stack, int &data)
+void pop(Node *&stack)
 {
+    int data;
     Node *aux = stack;
     data = aux->value;
     stack = aux->next;
@@ -35,6 +36,6 @@ main()
 
     push(stack, n1);
     push(stack, n2);
-    pop(stack, n2);
-    pop(stack, n1);
+    pop(stack);
+    pop(stack);
 }
